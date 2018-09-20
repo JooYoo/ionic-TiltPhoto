@@ -6,11 +6,13 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { PhotoTiltComponent } from '../components/photo-tilt/photo-tilt';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    PhotoTiltComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,8 @@
+<!-- Generated template for the PhotoTiltComponent component -->
+<div>
+  {{text}}
+</div>
+
+<div #mask class="mask">
+  <img #image [src]="tiltImage" (load)="initTilt()" />
+</div>
