@@ -7,6 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { PhotoTiltComponent } from '../components/photo-tilt/photo-tilt';
+import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device-motion';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { PhotoTiltComponent } from '../components/photo-tilt/photo-tilt';
   providers: [
     StatusBar,
     SplashScreen,
+    DeviceMotion,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
