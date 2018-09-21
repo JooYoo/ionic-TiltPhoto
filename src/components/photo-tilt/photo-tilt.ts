@@ -29,10 +29,13 @@ export class PhotoTiltComponent {
   height: any;
   width: any;
 
+  isActive: boolean;
+
   constructor(public platform: Platform,
     public domCtrl: DomController,
     public renderer: Renderer) {
 
+    this.isActive = false
 
   }
 
@@ -80,8 +83,19 @@ export class PhotoTiltComponent {
 
   }
 
-  onActive(ev){
+  mouseDown() {
+    this.isActive = true;
+    if(this.isActive){
+      console.log('isActive:' + 'onPress')
+    }
     
+  }
+
+  mouseUp(){ 
+    this.isActive = false
+    if(!this.isActive){
+      console.log('isActive:' + 'onRelease')
+    }
   }
 
   updatePosition() {

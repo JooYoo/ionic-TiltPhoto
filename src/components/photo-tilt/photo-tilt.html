@@ -3,4 +3,8 @@
   <img #image [src]="tiltImage" (load)="initTilt()" />
 </div>
 
-<button ion-button full>active</button>
+<button ion-button full 
+        (mousedown)='mouseDown()' 
+        (mouseup)='mouseUp()' 
+        (touchstart)='mouseDown()' 
+        (touchend)='mouseUp()'>active</button>
