@@ -13,7 +13,7 @@ import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device
   declarations: [
     MyApp,
     HomePage,
-    PhotoTiltComponent
+    PhotoTiltComponent 
   ],
   imports: [
     BrowserModule,

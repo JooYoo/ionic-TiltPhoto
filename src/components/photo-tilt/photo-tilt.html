@@ -1,8 +1,10 @@
-<div (panmove)='onPan($event)'>
-
   <div #mask class="mask">
-    <img #image [src]="tiltImage" (load)="initTilt()" />
-    <button ion-button full (mousedown)='mouseDown()' (mouseup)='mouseUp()' (touchstart)='mouseDown()' (touchend)='mouseUp()'>active</button>
-  </div>
+    <img #image src="http://farm5.staticflickr.com/4016/4251578904_f13592585c_b.jpg" (load)="initTilt()"/>
 
-</div>
+    <button ion-button full 
+    (mousedown)='mouseDown()' 
+    (mouseup)='mouseUp()' 
+    (touchstart)='mouseDown()' 
+    (touchend)='mouseUp()'
+    style="padding: 30px;">active</button>
+  </div>

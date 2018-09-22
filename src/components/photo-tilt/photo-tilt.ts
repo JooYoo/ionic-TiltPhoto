@@ -12,11 +12,11 @@ import { Platform, DomController, NavController } from 'ionic-angular'
 })
 export class PhotoTiltComponent {
 
-  @Input('tiltImage') tiltImage: any;
+  // @Input('tiltImage') tiltImage: any;
   @Input('tiltHeight') tiltHeight: any;
 
   @ViewChild('mask') mask: any;
-  @ViewChild('image') image: any;
+  @ViewChild('image')image: any;
 
   averageGamma: any = [];
   maxTilt: number = 20;
@@ -26,7 +26,7 @@ export class PhotoTiltComponent {
   aspectRatio: any;
   delta: any;
   height: any;
-  width: any;
+  width: any = 0;
 
   isActive: boolean;
 
@@ -135,7 +135,7 @@ export class PhotoTiltComponent {
     }
   }
 
-  mouseUp() {
+  mouseUp() { 
     this.isActive = false
     if (!this.isActive) {
       console.log('isActive:' + 'onRelease')
