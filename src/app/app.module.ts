@@ -7,13 +7,14 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { PhotoTiltComponent } from '../components/photo-tilt/photo-tilt';
-import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device-motion';
+import { ParallaxHeader } from '../directives/parallax-header/parallax-header';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    PhotoTiltComponent
+    PhotoTiltComponent,
+    ParallaxHeader
   ],
   imports: [
     BrowserModule,
@@ -27,7 +28,6 @@ import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device
   providers: [
     StatusBar,
     SplashScreen,
-    DeviceMotion,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
