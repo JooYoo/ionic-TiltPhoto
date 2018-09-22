@@ -1,6 +1,5 @@
 import { Component, Input, ViewChild, Renderer } from '@angular/core'
 import { Platform, DomController, NavController } from 'ionic-angular'
-import { DeviceMotion, DeviceMotionAccelerationData, DeviceMotionAccelerometerOptions } from '@ionic-native/device-motion';
 
 
 @Component({
@@ -30,6 +29,15 @@ export class PhotoTiltComponent {
   width: any;
 
   isActive: boolean;
+
+  zoomInX: number
+  zoomInY: number
+  zoomInOffset: number = 0.1
+  isStartPoint: boolean = true
+  startPointX: number
+  nextPointX: number
+  startPointY: number
+  nextPointY: number
 
   constructor(public platform: Platform,
     public domCtrl: DomController,
@@ -63,37 +71,73 @@ export class PhotoTiltComponent {
     this.updatePosition();
   }
 
-  onDeviceOrientation(ev) { // 如果设备出现方向上的变化，这个函数就会被调用
+  onPan(ev) {
+    console.log('onPanX:' + ev.center.x)
+    console.log('onPanY:' + ev.center.y)
 
-    if (this.averageGamma.length > 8) {
-      this.averageGamma.shift();
+    // this.zoomInX = ev.center.x
+    // this.zoomInY = ev.center.y
+
+    // catch the start point //then // get next point each time
+    if (this.isStartPoint) {
+      this.startPointY = ev.center.y
+      this.zoomInY = 1
+    }
+    else {
+      this.nextPointY = ev.center.y
+    }
+    console.log('startPoint:' + this.startPointY)
+    console.log('nextPoint:' + this.nextPointY)
+
+    if (this.startPointY > this.nextPointY) {
+      this.zoomInY += this.zoomInOffset
+    } else if (this.startPointY < this.nextPointY && !this.isStartPoint) {
+      this.zoomInY -= this.zoomInOffset
     }
 
-    this.averageGamma.push(ev.gamma);
-    // console.log("shift:" + this.averageGamma)
+    this.isStartPoint = false
 
-    // 求过去八次的平均值
-    this.latestTilt = this.averageGamma.reduce((previous, current) => {
-      return previous + current;
-    }) / this.averageGamma.length;
+    console.log("zoomInY:" + this.zoomInY)
+    console.log('--------------------------------')
 
-    this.domCtrl.write(() => {
-      this.updatePosition();
-    });
-
-  }
-
-  mouseDown() {
-    this.isActive = true;
-    if(this.isActive){
-      console.log('isActive:' + 'onPress')
-    }
+    this.renderer.setElementStyle(this.image.nativeElement, 'transform','scale('+ this.zoomInY + ')');
+    // this.renderer.setElementStyle(this.image.nativeElement, 'height', this.zoomInY + 'px');
     
   }
 
-  mouseUp(){ 
+  onDeviceOrientation(ev) { // 如果设备出现方向上的变化，这个函数就会被调用
+
+    if (this.isActive) {
+
+      if (this.averageGamma.length > 8) {
+        this.averageGamma.shift();
+      }
+
+      this.averageGamma.push(ev.gamma);
+       console.log("shift:" + this.averageGamma)
+
+      // 求过去八次的平均值
+      this.latestTilt = this.averageGamma.reduce((previous, current) => {
+        return previous + current;
+      }) / this.averageGamma.length;
+
+      this.domCtrl.write(() => {
+        this.updatePosition();
+      });
+    }
+  }
+
+  // click to active infinity
+  mouseDown() {
+    this.isActive = true;
+    if (this.isActive) {
+      console.log('isActive:' + 'onPress')
+    }
+  }
+
+  mouseUp() {
     this.isActive = false
-    if(!this.isActive){
+    if (!this.isActive) {
       console.log('isActive:' + 'onRelease')
     }
   }
@@ -117,10 +161,6 @@ export class PhotoTiltComponent {
   updateTiltImage(pxToMove) {
 
     this.renderer.setElementStyle(this.image.nativeElement, 'transform', 'translate3d(' + pxToMove + 'px,0,0)');
-
-    // 使用陀螺仪来调整照片大小，以此来实现远近的效果
-    //   this.renderer.setElementStyle(this.image.nativeElement, 'height',  -pxToMove+600 + 'px');
-    //   this.renderer.setElementStyle(this.image.nativeElement, 'width',  -pxToMove+600 + 'px');
   }
 
 }
