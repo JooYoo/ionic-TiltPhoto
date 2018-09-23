@@ -8,36 +8,37 @@
 
   
 </ion-content> -->
-<!-- <div #mask class="mask">
+<div #mask class="mask">
   <img #image src="http://farm5.staticflickr.com/4016/4251578904_f13592585c_b.jpg" />
-</div> -->
+</div>
 
 
-<ion-content padding #content  scrollX="true"  style="width: 100%; height: 380px;">
+<ion-content  padding #content  scrollX="true"  style="width: 100%; height: 380px;">
   <!-- <ion-scroll  scrollX="true" style="width: 100%; height: 280px;"> -->
-    <div class="iCardsWrapper" #cardWrapper>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
-      <div class="iCard"></div>
+    <div class="iCardsWrapper">
+      <div class="iCard">1</div>
+      <div class="iCard">2</div>
+      <div class="iCard">3</div>
+      <div class="iCard">4</div>
+      <div class="iCard">5</div>
+      <div class="iCard">6</div>
+      <div class="iCard">7</div>
+      <div class="iCard">8</div>
+      <div class="iCard">9</div>
+      <div class="iCard">10</div>
+      <div class="iCard">11</div>
+      <div class="iCard">12</div>
+      <div class="iCard">13</div>
+      <div class="iCard">14</div>
+      <div class="iCard">15</div>
+      <div class="iCard">16</div>
+      <div class="iCard">17</div>
     </div>
   <!-- </ion-scroll> -->
 </ion-content>
-<button ion-button (click)="scrollToRight()">right 500px</button>
-<button ion-button (click)="scrollToLeft()">left 500px</button>
+<button ion-button (click)="scrollToRight()"     style="padding: 30px;">right 500px</button>
+<button ion-button (click)="scrollToMoreRight()" style="padding: 30px;">More right</button>
+<button ion-button (click)="scrollToLeft()"      style="padding: 30px;">left 500px</button>
 
 
 
