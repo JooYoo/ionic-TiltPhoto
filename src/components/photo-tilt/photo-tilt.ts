@@ -1,5 +1,5 @@
 import { Component, Input, ViewChild, Renderer } from '@angular/core'
-import { Platform, DomController, NavController, Content } from 'ionic-angular'
+import { Platform, DomController, Content } from 'ionic-angular'
 
 
 @Component({
@@ -34,20 +34,13 @@ export class PhotoTiltComponent {
 
   isActive: boolean;
 
-  // zoomInX: number
-  // zoomInY: number
-  // zoomInOffset: number = 0.1
-  // isStartPoint: boolean = true
-  // startPointX: number
-  // nextPointX: number
-  // startPointY: number
-  // nextPointY: number
+ 
 
   constructor(public platform: Platform,
     public domCtrl: DomController,
     public renderer: Renderer) {
 
-    this.isActive = true
+    this.isActive = false
 
   }
 
@@ -74,16 +67,6 @@ export class PhotoTiltComponent {
 
       this.averageGamma.push(ev.gamma);
 
-      // console.log('averageGamma:'+ ev.gamma)
-
-      // if(ev.gamma > 0){
-      //   this.scrollToRight()
-      // }
-      // else{
-      //   this.scrollToLeft()
-      // }
-
-     
 
       // 求过去八次的平均值
       this.latestTilt = this.averageGamma.reduce((previous, current) => {
@@ -120,12 +103,11 @@ export class PhotoTiltComponent {
     this.height = this.tiltHeight || this.platform.height();
     this.width = this.platform.width();
     // 长宽比
-    this.aspectRatio = this.image.nativeElement.width / this.image.nativeElement.height;
+    this.aspectRatio = this.image.nativeElement.offsetWidth / this.image.nativeElement.offsetHeight;
 
-    // console.log('width:' + this.image.nativeElement.width)
-    // console.log('cardWrapper:' + this.cardWrapper.nativeElement.width)
+    console.log('width:' + this.image.nativeElement.offsetWidth)
+     console.log('aspectRatio:' + this.aspectRatio)
 
-   console.log('contentWidth:' + this.content.contentWidth)
 
     this.renderTilt();
 
@@ -135,7 +117,7 @@ export class PhotoTiltComponent {
 
     this.image.nativeElement.height = this.height;
 
-    this.resizedImageWidth = this.aspectRatio * this.image.nativeElement.height;
+    this.resizedImageWidth = this.aspectRatio * this.image.nativeElement.offsetHeight;
     this.renderer.setElementStyle(this.image.nativeElement, 'width', this.resizedImageWidth + 'px');
 
     this.delta = this.resizedImageWidth - this.width;
@@ -145,35 +127,9 @@ export class PhotoTiltComponent {
     this.updatePosition();
   }
 
-  // onPan(ev) {
-  //   // catch the start point //then // get next point each time
-  //   if (this.isStartPoint) {
-  //     this.startPointY = ev.center.y
-  //     this.zoomInY = 1
-  //   }
-  //   else {
-  //     this.nextPointY = ev.center.y
-  //   }
-
-  //   if (this.startPointY > this.nextPointY) {
-  //     this.zoomInY += this.zoomInOffset
-  //   } else if (this.startPointY < this.nextPointY && !this.isStartPoint) {
-  //     this.zoomInY -= this.zoomInOffset
-  //   }
-
-  //   this.isStartPoint = false
-
-  //   console.log('--------------------------------')
-
-  //   this.renderer.setElementStyle(this.image.nativeElement, 'transform','scale('+ this.zoomInY + ')');
-  //   // this.renderer.setElementStyle(this.image.nativeElement, 'height', this.zoomInY + 'px');
-    
-  // }
-
  
 
   // click to active infinity
- 
   updatePosition() {
 
     let tilt = this.latestTilt;
@@ -192,15 +148,10 @@ export class PhotoTiltComponent {
 
   updateTiltImage(pxToMove) {
 
-    this.renderer.setElementStyle(this.image.nativeElement, 'transform', 'translate3d(' + pxToMove + 'px,0,0)');
+    let cleanNum = Math.round(-pxToMove/8)
+    this.content.scrollTo(cleanNum,0,0.005);
     
-    
-
-
-    let cleanNum = Math.round(pxToMove)
-    this.content.scrollTo(-cleanNum,0,0.005);
-    
-    console.log('inEnd:' + -cleanNum)
+    console.log('inEnd:' + cleanNum)
   }
 
 }
