@@ -18,6 +18,7 @@ export class PhotoTiltComponent {
 
   @ViewChild('mask') mask: any;
   @ViewChild('image')image: any;
+
   @ViewChild('content') content: Content;
   
 
@@ -52,15 +53,15 @@ export class PhotoTiltComponent {
 
   scrollToRight(){
     console.log('scrollTo: Hitted!!')
-    this.content.scrollTo(900,0,1000);
+    this.content.scrollTo(900,0,2000);
   }
   scrollToMoreRight(){
-    this.content.scrollTo(200,0,1000);
+    this.content.scrollTo(200,0,2000);
   }
 
   scrollToLeft(){
     console.log('scrollTo: Hitted!!')
-    this.content.scrollTo(0,500,1000);
+    this.content.scrollTo(0,500,2000);
   }
 
   onDeviceOrientation(ev) { // 如果设备出现方向上的变化，这个函数就会被调用
@@ -124,6 +125,7 @@ export class PhotoTiltComponent {
     // console.log('width:' + this.image.nativeElement.width)
     // console.log('cardWrapper:' + this.cardWrapper.nativeElement.width)
 
+   console.log('contentWidth:' + this.content.contentWidth)
 
     this.renderTilt();
 
@@ -192,10 +194,13 @@ export class PhotoTiltComponent {
 
     this.renderer.setElementStyle(this.image.nativeElement, 'transform', 'translate3d(' + pxToMove + 'px,0,0)');
     
-    let cleanNum = Math.round(pxToMove)
-    this.content.scrollTo(-cleanNum,0,500);
     
-    console.log('inEnd:' + cleanNum)
+
+
+    let cleanNum = Math.round(pxToMove)
+    this.content.scrollTo(-cleanNum,0,0.005);
+    
+    console.log('inEnd:' + -cleanNum)
   }
 
 }
