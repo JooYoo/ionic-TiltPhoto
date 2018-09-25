@@ -8,12 +8,14 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { PhotoTiltComponent } from '../components/photo-tilt/photo-tilt';
 import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device-motion';
+import { FlipcardComponent } from '../components/flipcard/flipcard';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    PhotoTiltComponent 
+    PhotoTiltComponent,
+    FlipcardComponent
   ],
   imports: [
     BrowserModule,

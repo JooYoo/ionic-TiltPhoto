@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { PhotoTiltComponent } from './photo-tilt/photo-tilt';
+import { FlipcardComponent } from './flipcard/flipcard';
 @NgModule({
-	declarations: [PhotoTiltComponent],
+	declarations: [PhotoTiltComponent,
+    FlipcardComponent],
 	imports: [],
-	exports: [PhotoTiltComponent]
+	exports: [PhotoTiltComponent,
+    FlipcardComponent]
 })
 export class ComponentsModule {}
