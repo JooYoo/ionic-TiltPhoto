@@ -1,5 +1,5 @@
-import { Component, Renderer } from '@angular/core'
-import { Platform, DomController } from 'ionic-angular'
+import { Component, Renderer, ViewChild } from '@angular/core'
+import { Platform, DomController, Content } from 'ionic-angular'
 import { DeviceMotion, DeviceMotionAccelerationData, DeviceMotionAccelerometerOptions } from '@ionic-native/device-motion';
 
 @Component({
@@ -11,6 +11,8 @@ export class PhotoTiltComponent {
   data: any;
   subscription: any;
   cards: number[] = []
+
+  @ViewChild('scroll') scroll: any;
 
   constructor(public platform: Platform,
     public domCtrl: DomController,
@@ -33,6 +35,10 @@ export class PhotoTiltComponent {
 
   public stopMonitor() {
     this.subscription.unsubscribe();
+  }
+
+  public scrollToRight(): void {
+    this.scroll._scrollContent.nativeElement.scrollLeft = 500;
   }
 
 

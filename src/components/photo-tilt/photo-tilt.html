@@ -1,5 +1,5 @@
 <ion-content>
-  <button ion-button full (click)="startMonitor()">Start Motion</button>
+  <button ion-button full (click)="startMonitor()" (click)="scrollToRight()">Start Motion</button>
   <button ion-button full color="secondary" (click)="stopMonitor()" >Stop Motion</button>
 
   <ion-card *ngIf="data">
@@ -10,7 +10,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-scroll scrollX="true" scrollY="true" style="white-space:nowrap; height:1000px;">
+  <ion-scroll #scroll scrollX="true" scrollY="true" style="white-space:nowrap; height:1000px;">
       <div class="wrapper" >
           <div *ngFor="let card of cards">
             <label class="flipContainer">
