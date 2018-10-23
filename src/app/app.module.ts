@@ -8,6 +8,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { PhotoTiltComponent } from '../components/photo-tilt/photo-tilt';
 import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device-motion';
+import{DeviceOrientation} from '@ionic-native/device-orientation'
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device
     StatusBar,
     SplashScreen,
     DeviceMotion,
+    DeviceOrientation,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

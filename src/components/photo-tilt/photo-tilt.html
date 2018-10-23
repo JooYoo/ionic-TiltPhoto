@@ -1,36 +1,50 @@
 <ion-content>
   <button ion-button full (click)="startMonitor()" (click)="scrollToRight()">Start Motion</button>
-  <button ion-button full color="secondary" (click)="stopMonitor()" >Stop Motion</button>
+  <button ion-button full color="secondary" (click)="stopMonitor()">Stop Motion</button>
 
-  <ion-card *ngIf="data">
+  <ion-card *ngIf="accData">
+    <!-- <ion-card-content>
+      <h2>x: {{accData.x | number:'1.4-4'}}</h2>
+      <h2>y: {{accData.y | number:'1.4-4'}}</h2>
+      <h2>z: {{accData.z | number:'1.4-4'}}</h2>
+      <h2>timestamp: {{accTimeStamp | number:'1.4-4'}}</h2>
+    </ion-card-content> -->
+
     <ion-card-content>
-      <h2>x: {{data.x | number:'1.4-4'}}</h2>
-      <h2>y: {{data.y | number:'1.4-4'}}</h2>
-      <h2>z: {{data.z | number:'1.4-4'}}</h2>
-    </ion-card-content>
+        <h2>headingAccuracy: {{headingAccuracy | number:'1.4-4'}}</h2>
+        <h2>magneticHeading: {{magneticHeading | number:'1.4-4'}}</h2>
+        <h2>oriTimeStamp: {{oriTimeStamp | number:'1.4-4'}}</h2>
+        <h2>trueHeading: {{trueHeading | number:'1.4-4'}}</h2>
+      </ion-card-content>
+
+    <!-- <ion-card-content>
+      <h2>firstTimeStamp: {{firstTimeStamp | number:'1.4-4'}}</h2>
+      <h2>x: {{disX | number:'1.4-4'}}</h2>
+      <h2>y: {{disY | number:'1.4-4'}}</h2>
+      <h2>z: {{disZ | number:'1.4-4'}}</h2>
+    </ion-card-content> -->
   </ion-card>
 
   <ion-scroll #scroll scrollX="true" scrollY="true" style="white-space:nowrap; height:1000px;">
-      <div class="wrapper" >
-          <div *ngFor="let card of cards">
-            <label class="flipContainer">
-              <input type="checkbox" />
-      
-              <div class="theCard">
-                <div id="questionSide" style="">{{card}}</div>
-                <div class="back">Answer</div>
-              </div>
-            </label>
+    <div class="wrapper">
+      <div *ngFor="let card of cards">
+        <label class="flipContainer">
+          <input type="checkbox" />
+
+          <div class="theCard">
+            <div id="questionSide" style="">{{card}}</div>
+            <div class="back">Answer</div>
           </div>
-        </div>
+        </label>
+      </div>
+    </div>
   </ion-scroll>
- 
 
 
- 
+
+
 
 
 
 
 </ion-content>
- 
