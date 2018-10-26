@@ -1,7 +1,7 @@
 <ion-content>
-  <button ion-button full (click)="startMonitor()" (click)="scrollToRight()">Start Motion</button>
+  <button ion-button full (click)="startMonitor()" (click)="toScroll()">Start Motion</button>
   <button ion-button full color="secondary" (click)="stopMonitor()">Stop Motion</button>
-  <button ion-button full color="secondary" (click)="scrollToRight()">scrollToRight</button>
+  <button ion-button full color="secondary" (click)="toScroll()">scrollToRight</button>
 
   <ion-card *ngIf="accData">
     <ion-card-content>
@@ -10,13 +10,6 @@
       <h2>z: {{accData.z | number:'1.4-4'}}</h2>
       <h2>timestamp: {{accTimeStamp | number:'1.4-4'}}</h2>
     </ion-card-content>
-
-    <!-- <ion-card-content>
-        <h2>x: {{getAccData.x | number:'1.4-4'}}</h2>
-        <h2>y: {{getAccData.y | number:'1.4-4'}}</h2>
-        <h2>z: {{getAccData.z | number:'1.4-4'}}</h2>
-        <h2>t: {{getAccData.timestamp | number:'1.4-4'}}</h2>
-      </ion-card-content> -->
 
     <ion-card-content>
       <h2>firstTimeStamp: {{firstTimeStamp | number:'1.4-4'}}</h2>
