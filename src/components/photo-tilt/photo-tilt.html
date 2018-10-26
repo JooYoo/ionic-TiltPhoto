@@ -3,6 +3,7 @@
   <button ion-button full color="secondary" (click)="stopMonitor()">Stop Motion</button>
   <button ion-button full color="secondary" (click)="toScroll()">scrollToRight</button>
 
+  <p>{{scrollUnit}}</p>
   <ion-card *ngIf="accData">
     <ion-card-content>
       <h2>x: {{accData.x | number:'1.4-4'}}</h2>
