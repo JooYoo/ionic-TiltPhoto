@@ -2,6 +2,7 @@ import { Component, Renderer, ViewChild } from '@angular/core'
 import { Platform, DomController, Content } from 'ionic-angular'
 import { DeviceMotion, DeviceMotionAccelerationData, DeviceMotionAccelerometerOptions } from '@ionic-native/device-motion';
 import { ScrollType } from '../../app/Model/scrollType'
+import { DeviceOrientation, DeviceOrientationCompassHeading, DeviceOrientationCompassOptions } from '@ionic-native/device-orientation';
 
 @Component({
   selector: 'photo-tilt',
@@ -9,13 +10,17 @@ import { ScrollType } from '../../app/Model/scrollType'
 })
 export class PhotoTiltComponent {
 
-  accData: any;
+  counter: number = 0
+
+  lastAccData: any = 0
+  accData: any
   accTimeStamp: any
   disX: any
   disY: any
   disZ: any
 
-  scrollUnit: number = 5
+  scrollUnitX: number = 0
+  scrollUnitY: number = 0
 
   rawDataPoolX: number[] = []
   rawDataPoolY: number[] = []
@@ -26,12 +31,18 @@ export class PhotoTiltComponent {
   poolIndexX: number = 0
   poolIndexY: number = 0
   poolIndexZ: number = 0
-  resultsX: ScrollType[] = []
+  scrollActionsX: ScrollType[] = []
   resultsY: ScrollType[] = []
   resultsZ: ScrollType[] = []
+  iScrollActionX: number = 0
+  iScrollActionY: number = 0
 
   subscription: any;
   subscription2: any;
+  orienValue: any
+  headingAccuracy: any
+  magneticHeading: any
+  trueHeading: any
   cards: number[] = []
 
   @ViewChild('content') content: Content;
@@ -39,7 +50,8 @@ export class PhotoTiltComponent {
   constructor(public platform: Platform,
     public domCtrl: DomController,
     public renderer: Renderer,
-    public deviceMotion: DeviceMotion) {
+    public deviceMotion: DeviceMotion,
+    public deviceOrientation: DeviceOrientation) {
 
     // generate Cards
     for (let index = 0; index < 50; index++) {
@@ -48,7 +60,7 @@ export class PhotoTiltComponent {
 
   }
 
-  //TODO: result as enum
+
   getDataPool(rawDataPool: number[],
     datePool: number[],
     poolIndex: number,
@@ -61,6 +73,7 @@ export class PhotoTiltComponent {
       }
 
       for (var i = 0; i < 3; i++) {
+        console.log(rawDataPool[poolIndex] * 100)
         datePool.push(rawDataPool[poolIndex])
         poolIndex++
       }
@@ -71,16 +84,22 @@ export class PhotoTiltComponent {
 
   checkTrend(sampleNumber: number[], results: ScrollType[]) {
 
+
     if (sampleNumber[1] > sampleNumber[0] && sampleNumber[2] > sampleNumber[1]
       || sampleNumber[0] == sampleNumber[1] && sampleNumber[2] > sampleNumber[1]) {
       results.push(ScrollType.positive)
+      console.log("right")
     }
     else if (sampleNumber[0] == sampleNumber[1] && sampleNumber[1] == sampleNumber[2] || sampleNumber[0] == sampleNumber[2]) {
       results.push(ScrollType.stay)
+      console.log("stay")
     }
     else {
       results.push(ScrollType.negative)
+      console.log("left")
     }
+
+
   }
 
   public startMonitor() {
@@ -91,47 +110,77 @@ export class PhotoTiltComponent {
     this.subscription = this.deviceMotion.watchAcceleration(option).
       subscribe((acceleration: DeviceMotionAccelerationData) => {
         this.accData = acceleration
-        this.getherAccData(this.accData)
-        // this.accTimeStamp = acceleration.timestamp
+        //this.getherAccData(acceleration)
       });
-  }
 
+    var option2: DeviceOrientationCompassOptions = {
+      frequency: 400
+    };
+
+    this.subscription2 = this.deviceOrientation.watchHeading().subscribe(
+      (data: DeviceOrientationCompassHeading) => {
+        this.headingAccuracy = Math.round(data.headingAccuracy)
+        this.magneticHeading = Math.round(data.magneticHeading)
+        this.trueHeading = data.trueHeading
+        this.getherAccData(this.trueHeading)
+      }
+    )
+  }
   public stopMonitor() {
     this.subscription.unsubscribe();
   }
 
-  getherAccData(acceleration: any) {
 
-    // push acc data to raw data pool
-    this.rawDataPoolX.push(+Number(acceleration.x).toFixed(2))
-    this.rawDataPoolY.push(+Number(acceleration.y).toFixed(2))
-    this.rawDataPoolZ.push(+Number(acceleration.z).toFixed(2))
+  getherAccData(trueHeading: any) {
 
-    // handle raw data to get "direction signal"
-    this.getDataPool(this.rawDataPoolX, this.dataPoolX, this.poolIndexX, this.resultsX)
-    this.getDataPool(this.rawDataPoolY, this.dataPoolY, this.poolIndexY, this.resultsY)
-    this.getDataPool(this.rawDataPoolZ, this.dataPoolZ, this.poolIndexZ, this.resultsZ)
+    if (this.counter % 2 == 0) {
+      this.rawDataPoolX[0] = +Number(trueHeading).toFixed(3)
+    } else {
+      this.rawDataPoolX[1] = +Number(trueHeading).toFixed(3)
+    }
+    this.counter++
 
-    // scroll 
-    this.getScrollDirectionX(this.resultsX)
-    //FIXME: getScrollDirectionX
-    //this.getScrollDirectionX(this.resultsY)
+    if (this.rawDataPoolX[0] < this.rawDataPoolX[1]) {
+      this.moveXNegative()
+      console.log("left----")
+    }
+    else if (this.rawDataPoolX[0] > this.rawDataPoolX[1]) {
+      this.moveXPositive()
+      console.log("----right")
+
+    }
+
   }
 
-  // to scroll the content
+  moveXPositive() {
+    this.content.scrollTo(this.scrollUnitX += 100.001, 0, 10)
+  }
+  moveXNegative() {
+    this.content.scrollTo(this.scrollUnitX -= 100.001, 0, 10)
+  }
+
+
+  //#region scroll the content
   getScrollDirectionX(scrollActionsX: ScrollType[]): void {
-    //this.scroll._scrollContent.nativeElement.scrollTop = this.disZ
+    //TODO: try while effects
+
+
     for (let i = 0; i < scrollActionsX.length; i++) {
       const oneMoveDirectionX = scrollActionsX[i];
       this.toScrollX(oneMoveDirectionX)
     }
+
+    // this.iScrollActionX ++;
   }
   toScrollX(oneMoveDirectionX: ScrollType) {
+    // console.log(oneMoveDirectionX)
     if (oneMoveDirectionX == ScrollType.positive) {
-      this.content.scrollTo(2, 0, 300)
+      this.content.scrollTo(this.scrollUnitX += 5, 0, 0)
+
     }
     else if (oneMoveDirectionX == ScrollType.negative) {
-      this.content.scrollTo(-2, 0, 300)
+      this.content.scrollTo(this.scrollUnitX -= 5, 0, 0)
+
     } else {
       console.log("Stay.")
     }
@@ -147,17 +196,23 @@ export class PhotoTiltComponent {
   }
   toScrollY(oneMoveDirectionY: ScrollType) {
     if (oneMoveDirectionY == ScrollType.positive) {
-      this.content.scrollTo(0, this.scrollUnit +=5, 300)
+      this.content.scrollTo(0, this.scrollUnitY += 5, 300)
     }
     else if (oneMoveDirectionY == ScrollType.negative) {
-      this.content.scrollTo(0, 2, 300)
+      this.content.scrollTo(0, this.scrollUnitY -= 5, 300)
     } else {
-      console.log("Stay.")
+      console.log("Stay")
     }
   }
+  //#endregion
 
-  toScroll() {
-    this.content.scrollTo(this.scrollUnit += 5, 0)
+  //TODO: delete here
+  toScrollRight() {
+    this.content.scrollTo(this.scrollUnitX += 50, 0, 400)
   }
+  toScrollLeft() {
+    this.content.scrollTo(this.scrollUnitX -= 50, 0, 400)
+  }
+
 
 }

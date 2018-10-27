@@ -1,22 +1,23 @@
 <ion-content>
-  <button ion-button full (click)="startMonitor()" (click)="toScroll()">Start Motion</button>
+  <button ion-button full (click)="startMonitor()" (click)="startMonitor()">Start Motion</button>
   <button ion-button full color="secondary" (click)="stopMonitor()">Stop Motion</button>
-  <button ion-button full color="secondary" (click)="toScroll()">scrollToRight</button>
+  <button ion-button full color="secondary" (click)="toScrollRight()">scrollToRight</button>
+  <button ion-button full color="secondary" (click)="toScrollLeft()">scrollToLeft</button>
 
-  <p>{{scrollUnit}}</p>
+  <p>{{scrollUnitX}}</p>
   <ion-card *ngIf="accData">
-    <ion-card-content>
+    <!-- <ion-card-content>
       <h2>x: {{accData.x | number:'1.4-4'}}</h2>
       <h2>y: {{accData.y | number:'1.4-4'}}</h2>
       <h2>z: {{accData.z | number:'1.4-4'}}</h2>
-      <h2>timestamp: {{accTimeStamp | number:'1.4-4'}}</h2>
-    </ion-card-content>
+    </ion-card-content> -->
 
     <ion-card-content>
-      <h2>firstTimeStamp: {{firstTimeStamp | number:'1.4-4'}}</h2>
-      <h2>x: {{disX}}</h2>
-      <h2>y: {{disY}}</h2>
-      <h2>z: {{disZ}}</h2>
+     
+      <!-- <h2>headingAccuracy: {{headingAccuracy}}</h2>
+      <h2>magneticHeading: {{magneticHeading}}</h2> -->
+      <h2>rawDataPoolX[0]:     {{rawDataPoolX[0]}}</h2>
+      <h2>rawDataPoolX[1]:     {{rawDataPoolX[1]}}</h2>
     </ion-card-content>
   </ion-card>
 
