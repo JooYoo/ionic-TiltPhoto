@@ -4,7 +4,7 @@ import { Platform, DomController, Content } from 'ionic-angular'
 
 @Component({
   selector: 'photo-tilt',
-  templateUrl:'photo-tilt.html',
+  templateUrl: 'photo-tilt.html',
   host: {
     '(window:deviceorientation)': 'onDeviceOrientation($event)',
     '(window:resize)': 'ngOnInit()'
@@ -16,11 +16,10 @@ export class PhotoTiltComponent {
   @Input('tiltImage') tiltImage: any;
   @Input('tiltHeight') tiltHeight: any;
 
-  @ViewChild('mask') mask: any;
-  @ViewChild('image')image: any;
+  @ViewChild('image') image: any;
 
   @ViewChild('content') content: Content;
-  
+
 
   averageGamma: any = [];
   maxTilt: number = 20;
@@ -34,7 +33,7 @@ export class PhotoTiltComponent {
 
   isActive: boolean;
 
- 
+
 
   constructor(public platform: Platform,
     public domCtrl: DomController,
@@ -44,60 +43,8 @@ export class PhotoTiltComponent {
 
   }
 
-  scrollToRight(){
-    console.log('scrollTo: Hitted!!')
-    this.content.scrollTo(900,0,2000);
-  }
-  scrollToMoreRight(){
-    this.content.scrollTo(200,0,2000);
-  }
-
-  scrollToLeft(){
-    console.log('scrollTo: Hitted!!')
-    this.content.scrollTo(0,500,2000);
-  }
-
-  onDeviceOrientation(ev) { // 如果设备出现方向上的变化，这个函数就会被调用
-
-    if (this.isActive) {
-
-      if (this.averageGamma.length > 8) {
-        this.averageGamma.shift();
-      }
-
-      this.averageGamma.push(ev.gamma);
-
-
-      // 求过去八次的平均值
-      this.latestTilt = this.averageGamma.reduce((previous, current) => {
-        return previous + current;
-      }) / this.averageGamma.length;
-
-      this.domCtrl.write(() => {
-        this.updatePosition();
-      });
-    }
-  }
-
-  mouseDown() {
-    this.isActive = true;
-    if (this.isActive) {
-    //  console.log('isActive:' + 'onPress')
-    }
-  }
-
-
-  mouseUp() { 
-    this.isActive = false
-    if (!this.isActive) {
-      // console.log('isActive:' + 'onRelease')
-    }
-  }
-
-
-  // initTilt
+  //#region [1. initTilt]
   ngOnInit() {
-
     console.log('in initTilt!!!!')
 
     this.height = this.tiltHeight || this.platform.height();
@@ -106,13 +53,10 @@ export class PhotoTiltComponent {
     this.aspectRatio = this.image.nativeElement.offsetWidth / this.image.nativeElement.offsetHeight;
 
     console.log('width:' + this.image.nativeElement.offsetWidth)
-     console.log('aspectRatio:' + this.aspectRatio)
-
+    console.log('aspectRatio:' + this.aspectRatio)
 
     this.renderTilt();
-
   }
-
   renderTilt() { // 没有这里‘手机倾斜视角动’就不起作用了
 
     this.image.nativeElement.height = this.height;
@@ -126,10 +70,34 @@ export class PhotoTiltComponent {
 
     this.updatePosition();
   }
+  //#endregion
 
- 
 
-  // click to active infinity
+  //#region [2. get sensor Data]
+  onDeviceOrientation(ev) { // 如果设备出现方向上的变化，这个函数就会被调用
+    //TODO: [temp] if (this.isActive)
+    if (true) {
+
+      if (this.averageGamma.length > 8) {
+        this.averageGamma.shift();
+      }
+
+      this.averageGamma.push(ev.gamma);
+
+      // 求过去八次的平均值
+      this.latestTilt = this.averageGamma.reduce((previous, current) => {
+        return previous + current;
+      }) / this.averageGamma.length;
+
+      this.domCtrl.write(() => {
+        this.updatePosition();
+      });
+    }
+  }
+  //#endregion
+
+
+  //#region [3. to scroll]
   updatePosition() {
 
     let tilt = this.latestTilt;
@@ -145,13 +113,27 @@ export class PhotoTiltComponent {
     this.updateTiltImage((this.centerOffset + pxToMove) * -1);
 
   }
-
   updateTiltImage(pxToMove) {
 
-    let cleanNum = Math.round(-pxToMove/8)
-    this.content.scrollTo(cleanNum,0,0.005);
-    
+    let cleanNum = Math.round(-pxToMove / 8)
+    this.content.scrollTo(cleanNum, 0, 0.005);
+
     console.log('inEnd:' + cleanNum)
   }
+  //#endregion
+
+
+  //#region [0. Hold to active scroll]
+  mouseDown() {
+    this.isActive = true;
+    if (this.isActive) {
+    }
+  }
+  mouseUp() {
+    this.isActive = false
+    if (!this.isActive) {
+    }
+  }
+  //#endregion
 
 }
