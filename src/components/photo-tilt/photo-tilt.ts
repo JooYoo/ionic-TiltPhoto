@@ -12,15 +12,10 @@ import { Platform, DomController, Content } from 'ionic-angular'
   }
 })
 export class PhotoTiltComponent {
-
-  @Input('tiltImage') tiltImage: any;
-  @Input('tiltHeight') tiltHeight: any;
-
-  @ViewChild('image') image: any;
-
+  
+  @ViewChild('infinity') infinity: any;
   @ViewChild('content') content: Content;
-
-
+  
   averageGamma: any = [];
   maxTilt: number = 20;
   latestTilt: any = 0;
@@ -30,39 +25,42 @@ export class PhotoTiltComponent {
   delta: any;
   height: any;
   width: any = 0;
-
+  
   isActive: boolean;
-
-
+  cards:number[]=[]
 
   constructor(public platform: Platform,
     public domCtrl: DomController,
     public renderer: Renderer) {
 
-    this.isActive = false
+   for (let i = 0; i < 50; i++) {
+    this.cards.push(i)
+   }
 
+    this.isActive = false
   }
 
   //#region [1. initTilt]
   ngOnInit() {
     console.log('in initTilt!!!!')
 
-    this.height = this.tiltHeight || this.platform.height();
+    // this.height = this.tiltHeight || this.platform.height();
+    this.height = this.platform.height();
     this.width = this.platform.width();
     // 长宽比
-    this.aspectRatio = this.image.nativeElement.offsetWidth / this.image.nativeElement.offsetHeight;
+    this.aspectRatio = this.infinity.nativeElement.offsetWidth / this.infinity.nativeElement.offsetHeight;
 
-    console.log('width:' + this.image.nativeElement.offsetWidth)
+    console.log('width:' + this.infinity.nativeElement.offsetWidth)
     console.log('aspectRatio:' + this.aspectRatio)
 
     this.renderTilt();
   }
   renderTilt() { // 没有这里‘手机倾斜视角动’就不起作用了
 
-    this.image.nativeElement.height = this.height;
+    this.infinity.nativeElement.height = this.height;
 
-    this.resizedImageWidth = this.aspectRatio * this.image.nativeElement.offsetHeight;
-    this.renderer.setElementStyle(this.image.nativeElement, 'width', this.resizedImageWidth + 'px');
+    this.resizedImageWidth = this.aspectRatio * this.infinity.nativeElement.offsetHeight;
+    this.renderer.setElementStyle(this.infinity.nativeElement, 'width', this.resizedImageWidth + 'px');
 
     this.delta = this.resizedImageWidth - this.width;
     // 中心偏移量；中心起点

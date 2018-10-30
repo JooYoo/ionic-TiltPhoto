@@ -1,31 +1,21 @@
+<ion-content padding #content scrollX="true" 
+style="width: 100%; height: 1000px;">
 
+  <div #infinity class="wrapper">
+    <div *ngFor="let card of cards">
+      <label class="flipContainer">
+        <input type="checkbox" />
 
-
-<ion-content  padding #content  scrollX="true"  style="width: 100%; height: 880px;">
-  <!-- <ion-scroll  scrollX="true" style="width: 100%; height: 280px;"> -->
-    <div #image class="iCardsWrapper">
-        
-      <div class="iCard">1</div>
-      <div class="iCard">2</div>
-      <div class="iCard">3</div>
-      <div class="iCard">4</div>
-      <div class="iCard">5</div>
-      <div class="iCard">6</div>
-      <div class="iCard">7</div>
-      <div class="iCard">8</div>
-      <div class="iCard">9</div>
-      <div class="iCard">10</div>
+        <div class="theCard">
+          <div id="questionSide">{{card}}</div>
+          <div class="back">Answer</div>
+        </div>
+      </label>
     </div>
+  </div>
   <!-- </ion-scroll> -->
 </ion-content>
-<!-- <button ion-button (click)="scrollToRight()"     style="padding: 30px;">right 500px</button>
-<button ion-button (click)="scrollToMoreRight()" style="padding: 30px;">More right</button>
-<button ion-button (click)="scrollToLeft()"      style="padding: 30px;">left 500px</button> -->
 
-
-
-<!-- </div> -->
 
 <button ion-button full (mousedown)='mouseDown()' (mouseup)='mouseUp()' (touchstart)='mouseDown()' (touchend)='mouseUp()'
   style="padding: 30px;">active</button>
-
