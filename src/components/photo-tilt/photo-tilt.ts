@@ -17,6 +17,8 @@ export class PhotoTiltComponent {
   @ViewChild('content') content: Content;
   
   averageGamma: any = [];
+  averageBata: any = []
+
   maxTilt: number = 20;
   latestTilt: any = 0;
   centerOffset: any;
@@ -42,7 +44,6 @@ export class PhotoTiltComponent {
 
   //#region [1. initTilt]
   ngOnInit() {
-    console.log('in initTilt!!!!')
 
     // this.height = this.tiltHeight || this.platform.height();
     this.height = this.platform.height();
@@ -50,8 +51,8 @@ export class PhotoTiltComponent {
     // 长宽比
     this.aspectRatio = this.infinity.nativeElement.offsetWidth / this.infinity.nativeElement.offsetHeight;
 
-    console.log('width:' + this.infinity.nativeElement.offsetWidth)
-    console.log('aspectRatio:' + this.aspectRatio)
+    // console.log('width:' + this.infinity.nativeElement.offsetWidth)
+    // console.log('aspectRatio:' + this.aspectRatio)
 
     this.renderTilt();
   }
@@ -73,19 +74,31 @@ export class PhotoTiltComponent {
 
   //#region [2. get sensor Data]
   onDeviceOrientation(ev) { // 如果设备出现方向上的变化，这个函数就会被调用
-    //TODO: [temp] if (this.isActive)
-    if (true) {
+    
+    if (true) { //TODO: [temp] if (this.isActive)
 
+      //
+      // Gamma：水平方向位移
       if (this.averageGamma.length > 8) {
-        this.averageGamma.shift();
+        this.averageGamma.shift()
       }
-
-      this.averageGamma.push(ev.gamma);
-
-      // 求过去八次的平均值
+      // Gamma: 收集水平位移量
+      this.averageGamma.push(ev.gamma)
+      console.log("Gamma:" + ev.gamma)
+      // Gamma：求过去八次的平均值
       this.latestTilt = this.averageGamma.reduce((previous, current) => {
-        return previous + current;
-      }) / this.averageGamma.length;
+        return previous + current
+      }) / this.averageGamma.length
+
+
+      //
+      // Beta: 垂直方向位移
+      if (this.averageBata.length >8) {
+        this.averageBata.shift();
+      }
+      // Beta: 收集垂直方向位移量
+      this.averageBata.push(ev.beta);
+      console.log("Beta:" + ev.beta)
 
       this.domCtrl.write(() => {
         this.updatePosition();
@@ -115,8 +128,6 @@ export class PhotoTiltComponent {
 
     let cleanNum = Math.round(-pxToMove / 8)
     this.content.scrollTo(cleanNum, 0, 0.005);
-
-    console.log('inEnd:' + cleanNum)
   }
   //#endregion
 
