@@ -12,32 +12,35 @@ import { Platform, DomController, Content } from 'ionic-angular'
   }
 })
 export class PhotoTiltComponent {
-  
+
   @ViewChild('infinity') infinity: any;
   @ViewChild('content') content: Content;
-  
-  averageGamma: any = [];
-  averageBata: any = []
 
-  maxTilt: number = 20;
-  latestTilt: any = 0;
+  gammaAverage: any = [];
+  gammaLatestTilt: any = 0
+  gammaMaxTilt: number = 20;
+
+  betaAverage: any = []
+  betaLatestTilt: any = 0
+  betaMaxTilt: number = 20
+
   centerOffset: any;
   resizedImageWidth: any;
   aspectRatio: any;
   delta: any;
   height: any;
   width: any = 0;
-  
+
   isActive: boolean;
-  cards:number[]=[]
+  cards: number[] = []
 
   constructor(public platform: Platform,
     public domCtrl: DomController,
     public renderer: Renderer) {
 
-   for (let i = 0; i < 50; i++) {
-    this.cards.push(i)
-   }
+    for (let i = 0; i < 150; i++) {
+      this.cards.push(i)
+    }
 
     this.isActive = false
   }
@@ -74,31 +77,35 @@ export class PhotoTiltComponent {
 
   //#region [2. get sensor Data]
   onDeviceOrientation(ev) { // 如果设备出现方向上的变化，这个函数就会被调用
-    
+
     if (true) { //TODO: [temp] if (this.isActive)
 
       //
       // Gamma：水平方向位移
-      if (this.averageGamma.length > 8) {
-        this.averageGamma.shift()
+      if (this.gammaAverage.length > 8) {
+        this.gammaAverage.shift()
       }
       // Gamma: 收集水平位移量
-      this.averageGamma.push(ev.gamma)
-      console.log("Gamma:" + ev.gamma)
+      this.gammaAverage.push(ev.gamma)
+      // console.log("Gamma:" + ev.gamma)
       // Gamma：求过去八次的平均值
-      this.latestTilt = this.averageGamma.reduce((previous, current) => {
+      this.gammaLatestTilt = this.gammaAverage.reduce((previous, current) => {
         return previous + current
-      }) / this.averageGamma.length
+      }) / this.gammaAverage.length
 
 
       //
       // Beta: 垂直方向位移
-      if (this.averageBata.length >8) {
-        this.averageBata.shift();
+      if (this.betaAverage.length > 8) {
+        this.betaAverage.shift();
       }
       // Beta: 收集垂直方向位移量
-      this.averageBata.push(ev.beta);
-      console.log("Beta:" + ev.beta)
+      this.betaAverage.push(ev.beta);
+      // console.log("Beta:" + ev.beta)
+      // Beta: 求过去八次的平均值
+      this.betaLatestTilt = this.betaAverage.reduce((previous, current) => {
+        return previous + current
+      }) / this.betaAverage.length
 
       this.domCtrl.write(() => {
         this.updatePosition();
@@ -109,25 +116,44 @@ export class PhotoTiltComponent {
 
 
   //#region [3. to scroll]
-  updatePosition() {
-
-    let tilt = this.latestTilt;
-
-    if (tilt > 0) {
-      tilt = Math.min(tilt, this.maxTilt);
+  gammaUpdatePosition(): number {
+    let gammaTilt = this.gammaLatestTilt;
+    if (gammaTilt > 0) {
+      gammaTilt = Math.min(gammaTilt, this.gammaMaxTilt);
     } else {
-      tilt = Math.max(tilt, this.maxTilt * -1);
+      gammaTilt = Math.max(gammaTilt, this.gammaMaxTilt * -1);
     }
+    let gammaPxToMove = (gammaTilt * this.centerOffset) / this.gammaMaxTilt;
+    let gammaToMove = (this.centerOffset + gammaPxToMove) * -1
 
-    let pxToMove = (tilt * this.centerOffset) / this.maxTilt;
-
-    this.updateTiltImage((this.centerOffset + pxToMove) * -1);
-
+    return gammaToMove
   }
-  updateTiltImage(pxToMove) {
 
-    let cleanNum = Math.round(-pxToMove / 8)
-    this.content.scrollTo(cleanNum, 0, 0.005);
+  betaUpdatePosition(): number {
+    let betaTilt = this.betaLatestTilt;
+    if (betaTilt > 0) {
+      betaTilt = Math.min(betaTilt, this.betaMaxTilt)
+    } else {
+      betaTilt = Math.min(betaTilt, this.betaMaxTilt * -1)
+    }
+    let betaPxToMove = (betaTilt * this.centerOffset) / this.betaMaxTilt
+    let betaToMove = (this.centerOffset + betaPxToMove) * -1 - 50
+
+    return betaToMove
+  }
+
+  updatePosition() {
+    let gammaToMove = this.gammaUpdatePosition()
+    let betaToMove = this.betaUpdatePosition()
+
+    this.scrollCountent(gammaToMove, betaToMove)
+  }
+
+  scrollCountent(gammaToMove, betaToMove) {
+    let betaCleanNum = Math.round(-betaToMove / 8)
+    let gammaCleanNum = Math.round(-gammaToMove / 8)
+
+    this.content.scrollTo(gammaCleanNum, -betaCleanNum, 0.005);
   }
   //#endregion
 
