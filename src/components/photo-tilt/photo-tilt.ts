@@ -150,8 +150,10 @@ export class PhotoTiltComponent {
   }
 
   scrollCountent(gammaToMove, betaToMove) {
-    let betaCleanNum = Math.round(-betaToMove / 8)
+    let betaCleanNum = Math.round(betaToMove / 8)
     let gammaCleanNum = Math.round(-gammaToMove / 8)
+
+    console.log("beta:" + -betaCleanNum)
 
     this.content.scrollTo(gammaCleanNum, -betaCleanNum, 0.005);
   }

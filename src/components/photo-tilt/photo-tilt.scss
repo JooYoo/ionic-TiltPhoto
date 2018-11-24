@@ -16,33 +16,37 @@
     height: 300px;
     margin-left: 160px;
     margin-top: 90px;
+    
   }
 
   .flipContainer {
-    -webkit-perspective: 1000px;
-    perspective: 1000px;
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
     display: block;
     width: 300px;
     height: 200px;
     left: 50%;
     top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
     cursor: pointer;
     margin: 20px;
+    border-radius: 100px;
+    
+
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
   }
 
   .theCard {
     position: relative;
     height: 100%;
     width: 100%;
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
-    -webkit-transition: all 600ms;
-    transition: all 600ms;
-    background: antiquewhite;
+
+    -webkit-transition:all 600ms;
+    transition:all 600ms;
+    -webkit-transform-style:preserve-3d;
+    transform-style:preserve-3d;
   }
 
 
@@ -50,7 +54,8 @@
     background: gray;
     color: white;
     font-size: 60px;
-    font-family: fantasy;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 20px;
   }
 
   input {
@@ -61,20 +66,25 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background: #FFF;
+   background: #FFF;
     text-align: center;
     line-height: 200px;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
     border-radius: 2px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
 
   .theCard .back {
     background: #222;
     color: #FFF;
-    -webkit-transform: rotateY(180deg);
+    font-size: 30px;
+    border-radius: 20px;
+
     transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
   }
 
 
