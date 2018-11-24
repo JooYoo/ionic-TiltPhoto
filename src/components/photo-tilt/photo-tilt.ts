@@ -54,9 +54,6 @@ export class PhotoTiltComponent {
     // 长宽比
     this.aspectRatio = this.infinity.nativeElement.offsetWidth / this.infinity.nativeElement.offsetHeight;
 
-    // console.log('width:' + this.infinity.nativeElement.offsetWidth)
-    // console.log('aspectRatio:' + this.aspectRatio)
-
     this.renderTilt();
   }
   renderTilt() { // 没有这里‘手机倾斜视角动’就不起作用了
@@ -74,11 +71,10 @@ export class PhotoTiltComponent {
   }
   //#endregion
 
-
   //#region [2. get sensor Data]
   onDeviceOrientation(ev) { // 如果设备出现方向上的变化，这个函数就会被调用
 
-    if (true) { //TODO: [temp] if (this.isActive)
+    if (this.isActive) {
 
       //
       // Gamma：水平方向位移
@@ -87,7 +83,6 @@ export class PhotoTiltComponent {
       }
       // Gamma: 收集水平位移量
       this.gammaAverage.push(ev.gamma)
-      // console.log("Gamma:" + ev.gamma)
       // Gamma：求过去八次的平均值
       this.gammaLatestTilt = this.gammaAverage.reduce((previous, current) => {
         return previous + current
@@ -101,7 +96,6 @@ export class PhotoTiltComponent {
       }
       // Beta: 收集垂直方向位移量
       this.betaAverage.push(ev.beta);
-      // console.log("Beta:" + ev.beta)
       // Beta: 求过去八次的平均值
       this.betaLatestTilt = this.betaAverage.reduce((previous, current) => {
         return previous + current
@@ -118,11 +112,11 @@ export class PhotoTiltComponent {
   //#region [3. to scroll]
   gammaUpdatePosition(): number {
     let gammaTilt = this.gammaLatestTilt;
-    if (gammaTilt > 0) {
-      gammaTilt = Math.min(gammaTilt, this.gammaMaxTilt);
-    } else {
-      gammaTilt = Math.max(gammaTilt, this.gammaMaxTilt * -1);
-    }
+    // if (gammaTilt > 0) {
+    //   gammaTilt = Math.min(gammaTilt, this.gammaMaxTilt);
+    // } else {
+    //   gammaTilt = Math.max(gammaTilt, this.gammaMaxTilt * -1);
+    // }
     let gammaPxToMove = (gammaTilt * this.centerOffset) / this.gammaMaxTilt;
     let gammaToMove = (this.centerOffset + gammaPxToMove) * -1
 
@@ -131,13 +125,16 @@ export class PhotoTiltComponent {
 
   betaUpdatePosition(): number {
     let betaTilt = this.betaLatestTilt;
-    if (betaTilt > 0) {
-      betaTilt = Math.min(betaTilt, this.betaMaxTilt)
-    } else {
-      betaTilt = Math.min(betaTilt, this.betaMaxTilt * -1)
-    }
+
+    // if (betaTilt > 0) {
+    //   betaTilt = Math.min(betaTilt, this.betaMaxTilt)
+    // } else {
+    //   betaTilt = Math.min(betaTilt, this.betaMaxTilt * -1)
+    // }
     let betaPxToMove = (betaTilt * this.centerOffset) / this.betaMaxTilt
-    let betaToMove = (this.centerOffset + betaPxToMove) * -1 - 50
+    let betaToMove = (this.centerOffset + betaPxToMove) * -1
+    
+
 
     return betaToMove
   }
@@ -150,12 +147,10 @@ export class PhotoTiltComponent {
   }
 
   scrollCountent(gammaToMove, betaToMove) {
-    let betaCleanNum = Math.round(betaToMove / 8)
+    let betaCleanNum = Math.round(-betaToMove / 8)
     let gammaCleanNum = Math.round(-gammaToMove / 8)
 
-    console.log("beta:" + -betaCleanNum)
-
-    this.content.scrollTo(gammaCleanNum, -betaCleanNum, 0.005);
+    this.content.scrollTo(gammaCleanNum, betaCleanNum, 0.005);
   }
   //#endregion
 
